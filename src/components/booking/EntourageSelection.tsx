@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter } from 'lucide-react';
-import { useBooking, EntourageMember } from '../../stores/booking';
-import { MemberCard } from '../ui/MemberCard';
+import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';
+import { Button } from '../ui/button';
+import { ScrollArea } from '../ui/scroll-area';
 import { FilterPanel } from '../ui/FilterPanel';
+import { Input } from '../ui/input';
+import { MemberCard } from '../ui/MemberCard';
+import { useBooking } from '@/stores/booking';
+
+interface EntourageMember {
+  id: string;
+  name: string;
+  tagline: string;
+  image: string;
+  price: number;
+  traits: string[];
+  availability: string[];
+}
 
 const MOCK_MEMBERS: EntourageMember[] = [
   {
@@ -23,13 +37,31 @@ const MOCK_MEMBERS: EntourageMember[] = [
     price: 349,
     traits: ['Sophisticated', 'Charismatic', 'Wine Expert'],
     availability: ['2024-03-21', '2024-03-23', '2024-03-24']
+  },
+  {
+    id: '3',
+    name: 'Olivia Taylor',
+    tagline: 'Art Enthusiast & Curator',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
+    price: 279,
+    traits: ['Creative', 'Knowledgeable', 'Trendsetter'],
+    availability: ['2024-03-22', '2024-03-23', '2024-03-25']
+  },
+  {
+    id: '4',
+    name: 'Ethan Wong',
+    tagline: 'Tech Innovator & Gadget Guru',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=256&q=80',
+    price: 399,
+    traits: ['Tech-savvy', 'Innovative', 'Analytical'],
+    availability: ['2024-03-20', '2024-03-22', '2024-03-24']
   }
 ];
 
 export default function EntourageSelection() {
   const navigate = useNavigate();
   const { selectedMembers, addMember, removeMember } = useBooking();
-  const [showFilters, setShowFilters] = React.useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleContinue = () => {
     if (selectedMembers.length > 0) {
@@ -37,64 +69,80 @@ export default function EntourageSelection() {
     }
   };
 
+  const filteredMembers = MOCK_MEMBERS.filter(member =>
+    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.traits.some((trait: string) => trait.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="container mx-auto px-4 py-8 space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-light text-stone-900">
-          Select Entourage Members
-        </h2>
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center px-4 py-2 text-stone-600 hover:text-stone-900"
-        >
-          <Filter className="w-5 h-5 mr-2" />
-          Filters
-        </button>
+        <h1 className="text-3xl font-bold">Select Your Entourage</h1>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="lg:hidden">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <ScrollArea className="h-full">
+              <FilterPanel />
+            </ScrollArea>
+          </SheetContent>
+        </Sheet>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
-        <input
-          type="text"
-          placeholder="Search by name, traits, or expertise..."
-          className="w-full pl-10 pr-4 py-2 rounded-lg border border-stone-300 focus:border-sage-500 focus:ring-sage-500"
-        />
+      <div className="flex gap-8">
+        <aside className="hidden lg:block w-64 flex-shrink-0">
+          <FilterPanel />
+        </aside>
+
+        <main className="flex-1 space-y-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search members..."
+              className="pl-9"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredMembers.map((member) => (
+              <MemberCard
+                key={member.id}
+                member={member}
+                isSelected={selectedMembers.some((m) => m.id === member.id)}
+                onSelect={() => addMember(member)}
+                onDeselect={() => removeMember(member.id)}
+              />
+            ))}
+          </div>
+        </main>
       </div>
 
-      {showFilters && <FilterPanel />}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {MOCK_MEMBERS.map((member) => (
-          <MemberCard
-            key={member.id}
-            member={member}
-            isSelected={selectedMembers.some((m) => m.id === member.id)}
-            onSelect={() => addMember(member)}
-            onDeselect={() => removeMember(member.id)}
-          />
-        ))}
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 p-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <div>
-            <span className="text-stone-600">
+      <div className="fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-md border-t z-10">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="text-sm">
+            <span className="text-muted-foreground">
               {selectedMembers.length} members selected
             </span>
-            <span className="mx-2">•</span>
-            <span className="text-stone-900 font-medium">
-              Total: ${selectedMembers.reduce((sum, m) => sum + m.price, 0)}
+            <span className="mx-2 text-muted-foreground">•</span>
+            <span className="text-foreground font-medium">
+              ${selectedMembers.reduce((sum, m) => sum + m.price, 0)}
             </span>
           </div>
-          <button
+          <Button
             onClick={handleContinue}
             disabled={selectedMembers.length === 0}
-            className="px-6 py-2 bg-sage-600 text-white rounded-full hover:bg-sage-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Continue to Details
-          </button>
+            Continue
+          </Button>
         </div>
       </div>
     </div>
   );
 }
+
