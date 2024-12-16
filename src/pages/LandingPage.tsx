@@ -1,10 +1,14 @@
-import React from 'react';
 import Header from '../components/Header';
 import Features from '../components/Features';
 import HowItWorks from '../components/HowItWorks';
 import Testimonials from '../components/Testimonials';
 import Pricing from '../components/Pricing';
 import Footer from '../components/Footer';
+import ReservationsForSale from '@/components/ReservationsForSale';
+import BusinessModel from '../components/BusinessModel';
+import TeamMembers from '../components/TeamMembers';
+import AttractionStrategy from '../components/AttractionStrategy';
+import ImpactMeasurement from '../components/ImpactMeasurement';
 
 export default function LandingPage() {
   return (
@@ -12,9 +16,15 @@ export default function LandingPage() {
       <Header />
       <Features />
       <HowItWorks />
-      <Testimonials />
+      <BusinessModel />
+      {/* <TeamMembers /> */}
+      <ReservationsForSale />
+      <AttractionStrategy />
+      <ImpactMeasurement />
       <Pricing />
+      <Testimonials />
       <Footer />
     </div>
   );
 }
+

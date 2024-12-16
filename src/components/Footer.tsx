@@ -31,6 +31,12 @@ export default function Footer() {
             <ul className="space-y-3">
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">About</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Features</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">How It Works</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Business Model</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Team Members</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Attraction Strategy</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Impact Measurement</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Impact Measurement</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Pricing</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
             </ul>

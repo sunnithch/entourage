@@ -1,50 +1,60 @@
-import React from 'react';
-import { Check } from 'lucide-react';
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Check } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 
 interface PricingCardProps {
-  name: string;
-  description: string;
-  price: string;
-  period: string;
-  features: string[];
-  highlighted: boolean;
+  name: string
+  description: string
+  price: string
+  period: string
+  features: string[]
+  highlighted: boolean
 }
 
-export function PricingCard({ name, description, price, period, features, highlighted }: PricingCardProps) {
-  return (
-    <div className={`rounded-2xl p-8 ${
-      highlighted 
-        ? 'bg-sage-600 text-white ring-2 ring-sage-600 ring-offset-2' 
-        : 'bg-white text-stone-900'
-    }`}>
-      <h3 className="text-2xl font-medium mb-2">{name}</h3>
-      <p className={highlighted ? 'text-sage-100' : 'text-stone-600'}>{description}</p>
-      
-      <div className="my-8">
-        <span className="text-4xl font-medium">${price}</span>
-        <span className={highlighted ? 'text-sage-100' : 'text-stone-600'}>
-          /{period}
-        </span>
-      </div>
+export const PricingCard: React.FC<PricingCardProps> = ({
+  name,
+  description,
+  price,
+  period,
+  features,
+  highlighted
+}) => (
+  <motion.div
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="h-full"
+  >
+    <Card className={`h-full flex flex-col ${highlighted ? 'border-primary shadow-lg' : ''}`}>
+      <CardHeader className="flex-grow">
+        {highlighted && (
+          <Badge className="w-fit mb-2" variant="secondary">Most Popular</Badge>
+        )}
+        <CardTitle className="text-2xl">{name}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex items-baseline mb-6">
+          <span className="text-4xl font-bold">${price}</span>
+          <span className="ml-2 text-muted-foreground">{period}</span>
+        </div>
+        <ul className="space-y-2 mb-6">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start">
+              <Check className="w-5 h-5 text-primary mr-2 flex-shrink-0 mt-0.5" />
+              <span className="text-sm">{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+      <CardFooter className="mt-auto">
+        <Button className="w-full" variant={highlighted ? "default" : "outline"}>
+          Choose Plan
+        </Button>
+      </CardFooter>
+    </Card>
+  </motion.div>
+)
 
-      <ul className="space-y-4 mb-8">
-        {features.map((feature, index) => (
-          <li key={index} className="flex items-center">
-            <Check className={`w-5 h-5 mr-3 ${
-              highlighted ? 'text-sage-200' : 'text-sage-600'
-            }`} />
-            <span>{feature}</span>
-          </li>
-        ))}
-      </ul>
-
-      <button className={`w-full py-3 px-6 rounded-full transition-colors ${
-        highlighted
-          ? 'bg-white text-sage-600 hover:bg-sage-50'
-          : 'bg-sage-600 text-white hover:bg-sage-700'
-      }`}>
-        Get Started
-      </button>
-    </div>
-  );
-}

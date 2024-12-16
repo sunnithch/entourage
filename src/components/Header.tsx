@@ -23,7 +23,7 @@ const Header: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Entourage</h2>
+          <h2 className="text-4xl pb-16 sm:text-5xl font-bold text-white mb-4">Entourage</h2>
         </motion.div>
         <motion.h1
           className="text-5xl sm:text-6xl md:text-7xl font-extralight text-white mb-8 tracking-tight"
