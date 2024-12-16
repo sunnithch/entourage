@@ -6,7 +6,7 @@ import Pricing from '../components/Pricing';
 import Footer from '../components/Footer';
 import ReservationsForSale from '@/components/ReservationsForSale';
 import BusinessModel from '../components/BusinessModel';
-import TeamMembers from '../components/TeamMembers';
+// import TeamMembers from '../components/TeamMembers';
 import AttractionStrategy from '../components/AttractionStrategy';
 import ImpactMeasurement from '../components/ImpactMeasurement';
 
@@ -16,11 +16,11 @@ export default function LandingPage() {
       <Header />
       <Features />
       <HowItWorks />
-      <BusinessModel />
       {/* <TeamMembers /> */}
       <ReservationsForSale />
       <AttractionStrategy />
       <ImpactMeasurement />
+      <BusinessModel />
       <Pricing />
       <Testimonials />
       <Footer />
